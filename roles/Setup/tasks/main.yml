@@ -1,0 +1,52 @@
+---
+- name: Define paths for Inception
+  set_fact:
+    app_path: "/home/{{ ansible_user }}/inception/srcs"
+    data_path: "/home/{{ ansible_user }}/data"
+
+- name: Ensure project files are on the server
+  copy:
+    src: ./inception/srcs/
+    dest: "{{ app_path }}/"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Get the VM public IP address
+  uri:
+    url: https://api.ipify.org
+    return_content: yes
+  register: public_ip
+
+- name: Create mariadb volume directory
+  file:
+    path: "{{ data_path }}/mysql"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Create wordpress volume directory
+  file:
+    path: "{{ data_path }}/wordpress"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Set WP_URL in .env
+  lineinfile:
+    path: "{{ app_path }}/.env"
+    regexp: '^WP_URL='
+    line: "WP_URL=https://{{ public_ip.content }}"
+
+- name: Set DOMAIN_NAME in .env
+  lineinfile:
+    path: "{{ app_path }}/.env"
+    regexp: '^DOMAIN_NAME='
+    line: "DOMAIN_NAME={{ public_ip.content }}"
+
+- name: Set PMA_ABSOLUTE_URI in .env
+  lineinfile:
+    path: "{{ app_path }}/.env"
+    regexp: '^PMA_ABSOLUTE_URI='
+    line: "PMA_ABSOLUTE_URI=https://{{ public_ip.content }}/phpmyadmin"

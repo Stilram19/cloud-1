@@ -1,0 +1,7 @@
+- name: Set Up 42 Inception Environment
+  hosts: webservers
+  become: yes
+  roles:
+    - DockerInstallation
+    - Setup
+    - RunContainers

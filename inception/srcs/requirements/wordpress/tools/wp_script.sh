@@ -11,21 +11,16 @@ sed -i "s/localhost/$MDB_HOSTNAME/g" wp-config.php
 sed -i "s/database_name_here/$MDB_DATABASE/g" wp-config.php
 
 wp core install --allow-root \
-	--url=localhost \
-	--title="My WordPress Site" \
-	--admin_user=$WP_ADMIN \
-	--admin_password=$WP_ADMIN_PASSWORD \
-	--admin_email=bednaouiomar19@gmail.com
+    --url=$WP_URL\
+    --title="My WordPress Site" \
+    --admin_user=$WP_ADMIN \
+    --admin_password=$WP_ADMIN_PASSWORD \
+    --admin_email=bednaouiomar19@gmail.com
+
+wp option update siteurl "$WP_URL"
+wp option update home "$WP_URL"
 
 wp user create --allow-root $WP_USER aminekhallofi@gmail.com --user_pass=$WP_USER_PASSWORD
-
-# redis configuration
-
-wp config set WP_REDIS_HOST $WP_REDIS_HOST --allow-root
-wp config set WP_REDIS_PORT 6379 --raw --allow-root
-wp config set WP_REDIS_CLIENT phpredis --allow-root
-wp plugin install redis-cache --activate --allow-root
-wp redis enable --allow-root
 
 # running the fast cgi process manager in the foreground
 

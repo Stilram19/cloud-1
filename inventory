@@ -1,0 +1,4 @@
+[webservers]
+host1 ansible_host=167.172.145.153 ansible_user=obednaou ansible_ssh_private_key_file=./.ssh/key1.pem
+host2 ansible_host=146.190.208.20 ansible_user=obednaou ansible_ssh_private_key_file=./.ssh/key1.pem
+
