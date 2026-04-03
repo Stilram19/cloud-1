@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
-    restart: on-failure
+    restart: always
     depends_on:
       - wordpress
     ports:
@@ -28,7 +28,7 @@ services:
       - mariadb:/var/lib/mysql
     env_file:
       - .env
-    restart: on-failure
+    restart: always 
     expose:
       - "3306"
 
@@ -43,7 +43,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
-    restart: on-failure
+    restart: always 
     depends_on:
       - mariadb
     expose:
@@ -54,7 +54,7 @@ services:
     container_name: phpmyadmin
     depends_on:
       - mariadb
-    restart: on-failure
+    restart: always 
     networks:
       - inception_net
     env_file:
